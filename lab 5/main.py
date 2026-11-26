@@ -1,12 +1,12 @@
 import random
 from enum import Enum
-from abc import ABC, abstractmethod
+from functools import wraps
 
 def frame(method):
+    @wraps(method)
     def wrapper(self, *args, **kwargs):
-        print('111111111111111', *args, **kwargs)
-        return method
-        
+        print(f"{method.__name__}")
+        return method(self, *args, **kwargs)
     return wrapper
 
 class Taste(Enum):
@@ -41,10 +41,10 @@ class Topping(Enum):
         return f'{self.title} ({self.taste.value})'
 
 
-class G(Fruit):
-    def __init__(self, name, size, color, size_2):
-        super().__init__(name, size, color)
-        self.size_2 = size_2
+class Apple(Fruit):   
+    def __init__(self, name, size, color, taste, size_2):
+        super().__init__(name, size, color, taste)
+        self.size_2 = size_2e_2 = size_2
 
     def __str__(self):
         return super().__str__()
@@ -52,7 +52,7 @@ class G(Fruit):
 class FruitSalad:
     def __init__(self, name, fruits=None, topping=None):
         self.name = name
-        self.fruits = fruits if fruits is not None else []
+        self.fruits = list(fruits) if fruits is not None else []        
         self.topping = topping
 
     def add_fruit(self, fruit):
